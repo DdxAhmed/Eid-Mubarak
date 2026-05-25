@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 
 <head>
@@ -32,12 +32,77 @@
     <link rel="icon"
         href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🕋</text></svg>">
 
-    <script src="https://www.youtube.com/iframe_api"></script>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Scheherazade+New:wght@400;500;600;700&family=Noto+Naskh+Arabic:wght@400;500;600;700&display=swap"
-        rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Scheherazade+New:wght@400;500;600;700&family=Noto+Naskh+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --gold: #D4AF37;
+            --gold-light: #F5D676;
+            --gold-dark: #9A7B1C;
+            --emerald: #0D5C40;
+            --emerald-light: #1A8C60;
+            --deep-night: #030A14;
+            --night-blue: #060F22;
+            --midnight: #0A1628;
+            --cream: #FDF6E3;
+            --text-light: #F0E6C8;
+            --glass: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(212, 175, 55, 0.25);
+        }
 
+        body {
+            font-family: 'Amiri', serif;
+            background: var(--deep-night);
+            color: var(--text-light);
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        #loading-screen {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            background: var(--deep-night);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 2rem;
+        }
+
+        .loader-crescent {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: transparent;
+            box-shadow: inset -15px -5px 0 var(--gold);
+            animation: spin 1.8s ease-in-out infinite, glowPulse 1.8s ease-in-out infinite;
+            filter: drop-shadow(0 0 20px rgba(212, 175, 55, 0.6));
+        }
+
+        .loader-text {
+            font-family: 'Scheherazade New', serif;
+            font-size: 1.4rem;
+            color: var(--gold);
+            letter-spacing: 3px;
+            animation: fadeInOut 1.8s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes glowPulse {
+            0%, 100% { filter: drop-shadow(0 0 8px rgba(212, 175, 55, 0.5)); }
+            50% { filter: drop-shadow(0 0 25px rgba(212, 175, 55, 0.9)); }
+        }
+
+        @keyframes fadeInOut {
+            0%, 100% { opacity: 0.4; }
+            50% { opacity: 1; }
+        }
     </style>
     <link rel="stylesheet" href="style.css">
 </head>
@@ -49,7 +114,7 @@
 
     <!-- Floating Spiritual Mode Toggle Button -->
     <button class="floating-spiritual" id="floating-spiritual" onclick="toggleSpiritualMode()"
-        title="تفعيل نمط الخشوع الكامل" style="display: none;">
+        title="تفعيل نمط الخشوع الكامل" style="display: none;" aria-label="تفعيل نمط الخشوع الكامل">
         ✨
     </button>
 
@@ -122,7 +187,8 @@
 
             <div class="pw-input-wrap">
                 <input type="password" id="pw-input" class="pw-input"
-                    placeholder="ادخل كلمة المرور • Enter Eid Password" autocomplete="off" dir="ltr">
+                    placeholder="ادخل كلمة المرور • Enter Eid Password" autocomplete="off" dir="ltr"
+                    aria-label="ادخل كلمة المرور للدخول">
                 <span class="pw-icon">🔑</span>
             </div>
 
@@ -143,7 +209,7 @@
     </div>
 
     <!-- Floating Music Button -->
-    <button class="floating-music" id="floating-music" onclick="toggleMusic()" title="تشغيل/إيقاف التكبيرات">
+    <button class="floating-music" id="floating-music" onclick="toggleMusic()" title="تشغيل/إيقاف التكبيرات" aria-label="تشغيل أو إيقاف تكبيرات العيد">
         🔊
     </button>
 
@@ -367,7 +433,7 @@
                 <!-- Stream Video Frame Wrapper -->
                 <div class="stream-frame-wrapper">
                     <div class="stream-frame-inner">
-                        <iframe id="live-stream-iframe" src="https://www.youtube.com/embed/JIoc71OHmuU" frameborder="0"
+                        <iframe id="live-stream-iframe" src="https://www.youtube-nocookie.com/embed/JIoc71OHmuU" title="بث مباشر من الحرم المكي الشريف" frameborder="0"
                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                             allowfullscreen>
                         </iframe>
@@ -540,14 +606,14 @@
                     </h3>
 
                     <div class="dua-form-group">
-                        <label>نص الدعاء:</label>
+                        <label for="dua-text-input">نص الدعاء:</label>
                         <textarea id="dua-text-input"
                             placeholder="اكتب دعاءك الخاشع هنا... (مثال: اللهم اغفر لنا ذنوبنا، وارحم والدينا، وبارك في أرزاقنا...)"
                             maxlength="250"></textarea>
                     </div>
 
                     <div class="dua-form-group">
-                        <label>الاسم (اختياري):</label>
+                        <label for="dua-author-input">الاسم (اختياري):</label>
                         <input type="text" id="dua-author-input"
                             placeholder="مثال: أحمد، أو اتركه فارغاً ليكون (فاعل خير)" maxlength="30">
                     </div>
@@ -779,9 +845,9 @@
 
                         <!-- Talbiyah Slider -->
                         <div class="mixer-slider-item">
-                            <div class="slider-label">
+                            <label class="slider-label" for="volume-talbiyah">
                                 <span>🗣️</span> صوت تلبية الحجاج
-                            </div>
+                            </label>
                             <div class="slider-control-wrap">
                                 <input type="range" class="mixer-range" id="volume-talbiyah" min="0" max="100" value="0"
                                     oninput="adjustMixVolume('talbiyah', this.value)">
@@ -791,9 +857,9 @@
 
                         <!-- Ambience Slider -->
                         <div class="mixer-slider-item">
-                            <div class="slider-label">
+                            <label class="slider-label" for="volume-ambience">
                                 <span>💨</span> أجواء وصخب الحرم
-                            </div>
+                            </label>
                             <div class="slider-control-wrap">
                                 <input type="range" class="mixer-range" id="volume-ambience" min="0" max="100" value="0"
                                     oninput="adjustMixVolume('ambience', this.value)">
@@ -833,7 +899,6 @@
                     <div class="celebration-label">عيد مبارك</div>
                 </div>
             </div>
-
             <div class="floating-text-container">
                 <div class="floating-text">🌟 كل عام وأنتم بخير وسعادة 🌟</div>
                 <div class="floating-text">✨ عيد أضحى مبارك وسعيد ✨</div>
@@ -882,7 +947,6 @@
                 </div>
             </div>
         </section>
-
         <!-- Eid Card Generator -->
         <section class="section card-gen-section" id="eid-card">
             <h2 class="section-title reveal">🎁 كارت معايدة تفاعلي ثلاثي الأبعاد</h2>
@@ -890,7 +954,7 @@
             <div class="reveal">
                 <p style="color:var(--text-light);opacity:0.7;margin-bottom:1.5rem;">اكتب اسمك وهنصنعلك كارت عيد فخم
                     بداخل صندوق هدايا ذهبي تفاعلي! 🎁</p>
-                <input class="card-gen-input" id="card-name-input" placeholder="✍️ اكتب اسمك هنا..." />
+                <input class="card-gen-input" id="card-name-input" placeholder="✍️ اكتب اسمك هنا..." aria-label="اسمك لصناعة كارت المعايدة" />
                 <br>
                 <button class="emoji-rain-btn" onclick="generateEidCard()">✨ اصنع الكارت</button>
             </div>
@@ -933,13 +997,16 @@
                     والأقارب جاهزة للمشاركة والطباعة! 🎁</p>
                 <div style="display:flex; flex-direction:column; gap:0.8rem; max-width:400px; margin:0 auto 1.5rem;">
                     <input class="card-gen-input" id="eidiya-to-input"
-                        placeholder="✍️ اسم متلقي العيدية (مثال: أحمد)..." style="max-width:100%;" />
+                        placeholder="✍️ اسم متلقي العيدية (مثال: أحمد)..." style="max-width:100%;"
+                        aria-label="اسم متلقي العيدية" />
                     <input class="card-gen-input" id="eidiya-amount-input" placeholder="💰 قيمة العيدية (مثال: 200)..."
-                        style="max-width:100%;" />
+                        style="max-width:100%;" aria-label="قيمة العيدية" />
                     <input class="card-gen-input" id="eidiya-currency-input"
-                        placeholder="💵 العملة (مثال: جنيه / ريال)..." style="max-width:100%;" />
+                        placeholder="💵 العملة (مثال: جنيه / ريال)..." style="max-width:100%;"
+                        aria-label="العملة" />
                     <input class="card-gen-input" id="eidiya-from-input"
-                        placeholder="✍️ اسم مقدم العيدية (مثال: عمو خالد)..." style="max-width:100%;" />
+                        placeholder="✍️ اسم مقدم العيدية (مثال: عمو خالد)..." style="max-width:100%;"
+                        aria-label="اسم مقدم العيدية" />
                 </div>
                 <button class="emoji-rain-btn" onclick="generateEidiyaCard()">✨ اصنع العيدية</button>
             </div>
@@ -963,7 +1030,7 @@
                 <p style="color:var(--text-light);opacity:0.7;margin-bottom:1rem;">ارفع صورتك وهنحطها في إطار عيد
                     الأضحى!</p>
                 <input type="file" id="photo-upload" accept="image/*" style="display:none"
-                    onchange="handlePhotoUpload(event)">
+                    onchange="handlePhotoUpload(event)" aria-label="تحميل صورة للإطار">
                 <div class="photo-upload-area" onclick="document.getElementById('photo-upload').click()"
                     id="photo-upload-area">
                     <div class="photo-upload-label" id="photo-upload-label">
@@ -1016,11 +1083,11 @@
                     style="color: rgba(240, 230, 200, 0.7); text-decoration: none; font-size: 1.1rem; transition: color 0.3s;"
                     onmouseover="this.style.color='var(--gold-light)'"
                     onmouseout="this.style.color='rgba(240, 230, 200, 0.7)'" title="GitHub">📂 GitHub</a>
-                <a href="www.linkedin.com/in/ahmed-salmona" target="_blank"
+                <a href="https://www.linkedin.com/in/ahmed-salmona" target="_blank"
                     style="color: rgba(240, 230, 200, 0.7); text-decoration: none; font-size: 1.1rem; transition: color 0.3s;"
                     onmouseover="this.style.color='var(--gold-light)'"
                     onmouseout="this.style.color='rgba(240, 230, 200, 0.7)'" title="LinkedIn">👔 LinkedIn</a>
-                <a href="https://facebook.com/1ahmed.salmona target=" _blank"
+                <a href="https://facebook.com/1ahmed.salmona" target="_blank"
                     style="color: rgba(240, 230, 200, 0.7); text-decoration: none; font-size: 1.1rem; transition: color 0.3s;"
                     onmouseover="this.style.color='var(--gold-light)'"
                     onmouseout="this.style.color='rgba(240, 230, 200, 0.7)'" title="Facebook">👥 Facebook</a>

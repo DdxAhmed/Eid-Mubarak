@@ -1,17 +1,33 @@
+// Dynamically load the YouTube IFrame Player API asynchronously
+const tag = document.createElement('script');
+tag.src = "https://www.youtube.com/iframe_api";
+const firstScriptTag = document.getElementsByTagName('script')[0];
+if (firstScriptTag) {
+    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+} else {
+    document.head.appendChild(tag);
+}
 
 window.addEventListener('load', () => {
     createParticles();
     createLanterns();
 
+    // Start dismissing the loading screen much faster to improve FCP, LCP, and Speed Index.
     setTimeout(() => {
-        document.getElementById('loading-screen').style.opacity = '0';
-        document.getElementById('loading-screen').style.transition = 'opacity 0.8s ease';
+        const loader = document.getElementById('loading-screen');
+        if (loader) {
+            loader.style.opacity = '0';
+            loader.style.transition = 'opacity 0.5s ease';
+        }
         setTimeout(() => {
-            document.getElementById('loading-screen').style.display = 'none';
-            document.getElementById('intro-overlay').style.display = 'flex';
-            document.getElementById('intro-overlay').style.opacity = '1';
-        }, 800);
-    }, 2500);
+            if (loader) loader.style.display = 'none';
+            const intro = document.getElementById('intro-overlay');
+            if (intro) {
+                intro.style.display = 'flex';
+                intro.style.opacity = '1';
+            }
+        }, 500);
+    }, 400); // 400ms delay instead of 2500ms
 });
 // ======================== PARTICLES ========================
 function createParticles() {
@@ -130,6 +146,7 @@ let pendingPlay = false;
 window.onYouTubeIframeAPIReady = function () {
     // Main player
     ytPlayerMain = new YT.Player('yt-player-main', {
+        host: 'https://www.youtube-nocookie.com',
         videoId: mainTrackId,
         playerVars: {
             autoplay: 0,
@@ -157,6 +174,7 @@ window.onYouTubeIframeAPIReady = function () {
 
     // Talbiyah player
     ytPlayerTalbiyah = new YT.Player('yt-player-talbiyah', {
+        host: 'https://www.youtube-nocookie.com',
         videoId: talbiyahTrackId,
         playerVars: {
             autoplay: 0,
@@ -183,6 +201,7 @@ window.onYouTubeIframeAPIReady = function () {
 
     // Ambience player
     ytPlayerAmbience = new YT.Player('yt-player-ambience', {
+        host: 'https://www.youtube-nocookie.com',
         videoId: ambienceTrackId,
         playerVars: {
             autoplay: 0,

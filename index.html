@@ -34,9 +34,20 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <!-- Load only essential fonts, with font-display:swap to prevent FOIT -->
-    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Scheherazade+New:wght@400;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+    <!-- Async font load: prevents render-blocking, display=swap avoids FOIT -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Scheherazade+New:wght@400;700&display=swap" as="style" onload="this.rel='stylesheet'">
     <noscript><link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Scheherazade+New:wght@400;700&display=swap" rel="stylesheet"></noscript>
+    <!-- CLS fix: match fallback font metrics to Arabic fonts to reduce layout shift -->
+    <style>
+        @font-face {
+            font-family: 'Amiri';
+            font-style: normal;
+            font-weight: 400;
+            font-display: swap;
+            src: local('Arial');
+            size-adjust: 102%;
+        }
+    </style>
     <style>
         :root {
             --gold: #D4AF37;
@@ -106,9 +117,9 @@
             50% { opacity: 1; }
         }
     </style>
+    <!-- Non-blocking CSS: loading screen uses inline styles above, main CSS deferred -->
     <link rel="preload" href="style.css" as="style" onload="this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="style.css"></noscript>
-    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
@@ -144,12 +155,12 @@
     <!-- Loading Screen -->
     <div id="loading-screen">
         <div class="loader-crescent"></div>
-        <div class="loader-text">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ</div>
+        <div class="loader-text" elementtiming="loading-text">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ</div>
     </div>
 
     <!-- Intro Track Selector Overlay -->
     <div id="intro-overlay"
-        style="display:none; position:fixed; inset:0; z-index:9999; background:rgba(6,12,24,0.9); backdrop-filter:blur(30px); align-items:center; justify-content:center; padding:1.5rem; transition: opacity 0.8s ease;">
+        style="display:none; position:fixed; inset:0; z-index:9999; background:rgba(6,12,24,0.95); align-items:center; justify-content:center; padding:1.5rem; transition: opacity 0.5s ease;">
         <div class="password-card" style="max-width: 500px; animation: none;">
             <span class="pw-crescent">🎵</span>
             <div class="pw-title" style="font-size: 2rem;">مرحباً بك في موقع العيد ✨</div>

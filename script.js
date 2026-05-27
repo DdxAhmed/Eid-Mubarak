@@ -8,16 +8,15 @@ function loadYouTubeAPI() {
     document.head.appendChild(tag);
 }
 
-window.addEventListener('load', () => {
-    createParticles();
-    createLanterns();
-
-    // Start dismissing the loading screen much faster to improve FCP, LCP, and Speed Index.
+// Show intro overlay ASAP using DOMContentLoaded (not window.load)
+// This fires as soon as HTML is parsed, before images/fonts load
+document.addEventListener('DOMContentLoaded', () => {
+    // Dismiss loading screen quickly
     setTimeout(() => {
         const loader = document.getElementById('loading-screen');
         if (loader) {
             loader.style.opacity = '0';
-            loader.style.transition = 'opacity 0.5s ease';
+            loader.style.transition = 'opacity 0.3s ease';
         }
         setTimeout(() => {
             if (loader) loader.style.display = 'none';
@@ -26,8 +25,13 @@ window.addEventListener('load', () => {
                 intro.style.display = 'flex';
                 intro.style.opacity = '1';
             }
-        }, 500);
-    }, 400); // 400ms delay instead of 2500ms
+            // Defer non-critical visual elements until after intro is shown
+            requestIdleCallback(() => {
+                createParticles();
+                createLanterns();
+            }, { timeout: 2000 });
+        }, 300);
+    }, 100); // 100ms minimum so loading screen flashes briefly
 });
 // ======================== PARTICLES ========================
 function createParticles() {

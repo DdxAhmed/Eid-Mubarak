@@ -117,9 +117,8 @@
             50% { opacity: 1; }
         }
     </style>
-    <!-- Non-blocking CSS: loading screen uses inline styles above, main CSS deferred -->
-    <link rel="preload" href="style.css" as="style" onload="this.rel='stylesheet'">
-    <noscript><link rel="stylesheet" href="style.css"></noscript>
+    <!-- render-blocking CSS: loading screen (z-index:9999) hides FOUC, and CLS is 0 since styles apply before main content paints -->
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>

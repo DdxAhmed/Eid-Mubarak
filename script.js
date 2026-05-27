@@ -8,31 +8,34 @@ function loadYouTubeAPI() {
     document.head.appendChild(tag);
 }
 
-// Show intro overlay ASAP using DOMContentLoaded (not window.load)
-// This fires as soon as HTML is parsed, before images/fonts load
-document.addEventListener('DOMContentLoaded', () => {
-    // Dismiss loading screen quickly
-    setTimeout(() => {
-        const loader = document.getElementById('loading-screen');
-        if (loader) {
-            loader.style.opacity = '0';
-            loader.style.transition = 'opacity 0.3s ease';
-        }
+// CRITICAL FIX: script has defer attribute, so DOMContentLoaded already fired
+// before this script runs. Use direct execution instead.
+// Deferred scripts run after DOM is fully parsed - DOM is already ready here.
+(function dismissLoadingScreen() {
+    const loader = document.getElementById('loading-screen');
+    if (!loader) return;
+
+    // Dismiss loading screen immediately (DOM is already ready)
+    requestAnimationFrame(() => {
+        loader.style.opacity = '0';
+        loader.style.transition = 'opacity 0.25s ease';
+
         setTimeout(() => {
-            if (loader) loader.style.display = 'none';
+            loader.style.display = 'none';
             const intro = document.getElementById('intro-overlay');
             if (intro) {
                 intro.style.display = 'flex';
                 intro.style.opacity = '1';
             }
-            // Defer non-critical visual elements until after intro is shown
-            requestIdleCallback(() => {
-                createParticles();
-                createLanterns();
-            }, { timeout: 2000 });
-        }, 300);
-    }, 100); // 100ms minimum so loading screen flashes briefly
-});
+            // Defer particles/lanterns - non-critical visual elements
+            if (typeof requestIdleCallback !== 'undefined') {
+                requestIdleCallback(() => { createParticles(); createLanterns(); }, { timeout: 1500 });
+            } else {
+                setTimeout(() => { createParticles(); createLanterns(); }, 500);
+            }
+        }, 250);
+    });
+})();
 // ======================== PARTICLES ========================
 function createParticles() {
     const container = document.getElementById('particles');

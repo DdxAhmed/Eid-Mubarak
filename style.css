@@ -93,6 +93,8 @@
                 radial-gradient(ellipse at 80% 0%, #0A2318 0%, transparent 50%),
                 linear-gradient(180deg, #030A14 0%, #060F22 50%, #030A14 100%);
             overflow: hidden;
+            will-change: transform;
+            transform: translateZ(0);
         }
 
         /* Stars */
@@ -121,6 +123,7 @@
                 radial-gradient(1px 1px at 50% 85%, rgba(255, 255, 255, 0.6) 0%, transparent 100%),
                 radial-gradient(1px 1px at 88% 88%, rgba(255, 255, 255, 0.7) 0%, transparent 100%);
             animation: twinkle 4s ease-in-out infinite alternate;
+            will-change: opacity;
         }
 
         .stars-layer-2 {
@@ -141,6 +144,7 @@
                 radial-gradient(1px 1px at 97% 38%, rgba(212, 175, 55, 0.6) 0%, transparent 100%);
             animation: twinkle 6s ease-in-out infinite alternate-reverse;
             animation-delay: -2s;
+            will-change: opacity;
         }
 
         @keyframes twinkle {
@@ -162,6 +166,7 @@
             opacity: 0.04;
             background-image: url("data:image/svg+xml,%3Csvg width='120' height='120' viewBox='0 0 120 120' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23D4AF37' fill-rule='evenodd'%3E%3Cpolygon points='60,5 68,30 95,30 73,46 81,72 60,56 39,72 47,46 25,30 52,30'/%3E%3Ccircle cx='60' cy='60' r='8' fill='none' stroke='%23D4AF37' stroke-width='1'/%3E%3Cpolygon points='60,20 64,32 77,32 67,40 71,53 60,45 49,53 53,40 43,32 56,32' fill='none' stroke='%23D4AF37' stroke-width='0.5'/%3E%3C/g%3E%3C/svg%3E");
             background-repeat: repeat;
+            pointer-events: none;
         }
 
         /* ======================== FLOATING PARTICLES ======================== */
@@ -170,6 +175,7 @@
             inset: 0;
             z-index: 1;
             pointer-events: none;
+            transform: translateZ(0);
         }
 
         .particle {
@@ -645,6 +651,8 @@
             padding: 6rem 2rem;
             max-width: 1100px;
             margin: 0 auto;
+            content-visibility: auto;
+            contain-intrinsic-size: 0 600px;
         }
 
         .section-title {
@@ -671,15 +679,18 @@
         }
 
         .glass-card {
-            background: var(--glass);
-            backdrop-filter: blur(20px);
+            background: rgba(10, 22, 40, 0.7);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
             border: 1px solid var(--glass-border);
             border-radius: 20px;
             padding: 2rem;
             position: relative;
             overflow: hidden;
-            transition: all 0.4s ease;
+            transition: transform 0.4s ease, box-shadow 0.4s ease, border-color 0.4s ease;
             text-align: center;
+            will-change: transform;
+            contain: layout style;
         }
 
         .glass-card::before {
@@ -720,15 +731,15 @@
 
         /* ======================== HADITHS ======================== */
         .hadith-card {
-            background: rgba(10, 60, 35, 0.25);
-            backdrop-filter: blur(20px);
+            background: rgba(10, 50, 30, 0.6);
             border: 1px solid rgba(26, 140, 96, 0.3);
             border-right: 4px solid var(--gold);
             border-radius: 16px;
             padding: 2.2rem 2.5rem;
             margin-bottom: 2rem;
             position: relative;
-            transition: all 0.3s ease;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            contain: layout style;
         }
 
         .hadith-card:hover {
@@ -774,14 +785,14 @@
         }
 
         .reminder-card {
-            background: rgba(15, 25, 50, 0.6);
-            backdrop-filter: blur(15px);
+            background: rgba(10, 18, 40, 0.8);
             border: 1px solid rgba(212, 175, 55, 0.2);
             border-radius: 16px;
             padding: 1.8rem;
             text-align: center;
-            transition: all 0.3s ease;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
             position: relative;
+            contain: layout style;
         }
 
         .reminder-card::after {
@@ -1127,8 +1138,9 @@
             left: 0;
             right: 0;
             z-index: 500;
-            background: rgba(3, 10, 20, 0.85);
-            backdrop-filter: blur(20px);
+            background: rgba(3, 10, 20, 0.92);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
             border-bottom: 1px solid rgba(212, 175, 55, 0.15);
             padding: 1rem 2rem;
             display: none;
@@ -1269,6 +1281,7 @@
         .azkar-track {
             display: inline-flex;
             animation: tickerScroll 40s linear infinite;
+            will-change: transform;
         }
 
         .azkar-item {

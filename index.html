@@ -34,7 +34,9 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Scheherazade+New:wght@400;500;600;700&family=Noto+Naskh+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Load only essential fonts, with font-display:swap to prevent FOIT -->
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Scheherazade+New:wght@400;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+    <noscript><link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Scheherazade+New:wght@400;700&display=swap" rel="stylesheet"></noscript>
     <style>
         :root {
             --gold: #D4AF37;
@@ -104,6 +106,8 @@
             50% { opacity: 1; }
         }
     </style>
+    <link rel="preload" href="style.css" as="style" onload="this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="style.css"></noscript>
     <link rel="stylesheet" href="style.css">
 </head>
 
@@ -433,9 +437,9 @@
                 <!-- Stream Video Frame Wrapper -->
                 <div class="stream-frame-wrapper">
                     <div class="stream-frame-inner">
-                        <iframe id="live-stream-iframe" src="https://www.youtube-nocookie.com/embed/JIoc71OHmuU" title="بث مباشر من الحرم المكي الشريف" frameborder="0"
+                        <iframe id="live-stream-iframe" src="" data-src="https://www.youtube-nocookie.com/embed/JIoc71OHmuU" title="بث مباشر من الحرم المكي الشريف" frameborder="0"
                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                            allowfullscreen>
+                            allowfullscreen loading="lazy">
                         </iframe>
                     </div>
                 </div>
@@ -1103,7 +1107,7 @@
         </footer>
 
     </div>
-    <script src="script.js"></script>
+    <script src="script.js" defer></script>
 </body>
 
 </html>

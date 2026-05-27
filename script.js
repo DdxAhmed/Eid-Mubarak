@@ -1,10 +1,10 @@
-// Dynamically load the YouTube IFrame Player API asynchronously
-const tag = document.createElement('script');
-tag.src = "https://www.youtube.com/iframe_api";
-const firstScriptTag = document.getElementsByTagName('script')[0];
-if (firstScriptTag) {
-    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-} else {
+// YouTube API will be loaded lazily on first music interaction
+let ytApiLoaded = false;
+function loadYouTubeAPI() {
+    if (ytApiLoaded) return;
+    ytApiLoaded = true;
+    const tag = document.createElement('script');
+    tag.src = "https://www.youtube.com/iframe_api";
     document.head.appendChild(tag);
 }
 
@@ -262,6 +262,9 @@ function changeMainTrack(trackKey) {
 }
 
 function selectIntroTrack(trackKey) {
+    // Load YouTube API on first interaction
+    loadYouTubeAPI();
+
     // Save selection to main players
     changeMainTrack(trackKey);
 
@@ -287,6 +290,7 @@ function selectIntroTrack(trackKey) {
 }
 
 function startMusic() {
+    loadYouTubeAPI(); // ensure API loaded
     if (!ytReadyMain) { pendingPlay = true; return; }
     musicPlaying = true;
 
@@ -517,12 +521,36 @@ function initScrollReveal() {
     };
 })();
 
-// ======================== PARALLAX SCROLLING ========================
+// ======================== PARALLAX SCROLLING (debounced with rAF) ========================
+let scrollTicking = false;
 window.addEventListener('scroll', () => {
-    const scrollY = window.scrollY;
-    const sky = document.querySelector('.night-sky');
-    if (sky) sky.style.transform = 'translateY(' + (scrollY * 0.3) + 'px)';
+    if (!scrollTicking) {
+        requestAnimationFrame(() => {
+            const scrollY = window.scrollY;
+            const sky = document.querySelector('.night-sky');
+            if (sky) sky.style.transform = 'translateY(' + (scrollY * 0.3) + 'px)';
+            scrollTicking = false;
+        });
+        scrollTicking = true;
+    }
 }, { passive: true });
+
+// ======================== LAZY LOAD LIVE STREAM IFRAME ========================
+(function () {
+    const iframe = document.getElementById('live-stream-iframe');
+    if (!iframe) return;
+    const src = iframe.getAttribute('data-src');
+    if (!src) return;
+    const iframeObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                iframe.src = src;
+                iframeObserver.disconnect();
+            }
+        });
+    }, { threshold: 0.1, rootMargin: '200px' });
+    iframeObserver.observe(iframe);
+})();
 
 // ======================== EMOJI RAIN ========================
 function emojiRain(type) {
